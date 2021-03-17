@@ -2,4 +2,6 @@
 
 import { add } from '../add'
 
-it('works', () => {})
+it('adds two numbers', () => {
+  expect(add(2, 3)).to.equal(5)
+})
