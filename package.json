@@ -1,5 +1,5 @@
 {
-  "name": "cypress-esbuild-preprocessor",
+  "name": "@bahmutov/cypress-esbuild-preprocessor",
   "version": "0.0.0-development",
   "description": "Bundle Cypress specs using esbuild",
   "main": "src",
@@ -30,5 +30,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/bahmutov/cypress-esbuild-preprocessor.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

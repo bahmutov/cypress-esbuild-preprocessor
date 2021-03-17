@@ -1,4 +1,4 @@
-# cypress-esbuild-preprocessor
+# @bahmutov/cypress-esbuild-preprocessor
 ![cypress version](https://img.shields.io/badge/cypress-6.7.1-brightgreen) ![esbuild version](https://img.shields.io/badge/esbuild-0.9.2-brightgreen) [![ci status][ci image]][ci url]
 > Bundle Cypress specs using [esbuild](https://esbuild.github.io/)
 
@@ -16,7 +16,7 @@ In your plugin file use this module as the preprocessor
 ```js
 // cypress/plugins/index.js
 module.exports = (on, config) => {
-  on('file:preprocessor', require('cypress-esbuild-preprocessor'))
+  on('file:preprocessor', require('@bahmutov/cypress-esbuild-preprocessor'))
 }
 ```
 
