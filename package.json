@@ -10,9 +10,11 @@
     "test": "cypress run",
     "semantic-release": "semantic-release"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "cypress-preprocessor"
+  ],
+  "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
+  "license": "MIT",
   "devDependencies": {
     "cypress": "6.7.1",
     "prettier": "2.2.1",
