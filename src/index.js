@@ -6,11 +6,18 @@ const filePreprocessor = (file) => {
 
   debug({ filePath, outputPath, shouldWatch })
 
+  const started = +new Date()
+
   esbuild.buildSync({
     entryPoints: [filePath],
     outfile: outputPath,
     bundle: true,
   })
+  const finished = +new Date()
+  const elapsed = finished - started
+  debug('bundling took %dms', elapsed)
+
+  return outputPath
 }
 
-export default filePreprocessor
+module.exports = filePreprocessor
