@@ -24,5 +24,7 @@ module.exports = (on, config) => {
 
 Run with the environment variable `DEBUG=cypress-esbuild-preprocessor`
 
+But also if something is not working, check out the alternative package: [cypress-esbuild-preprocessor](https://github.com/sod/cypress-esbuild-preprocessor#readme)
+
 [ci image]: https://github.com/bahmutov/cypress-esbuild-preprocessor/workflows/ci/badge.svg?branch=main
 [ci url]: https://github.com/bahmutov/cypress-esbuild-preprocessor/actions
