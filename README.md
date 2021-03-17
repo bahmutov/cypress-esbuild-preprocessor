@@ -5,7 +5,7 @@
 ## Install
 
 ```
-npx i -D cypress cypress-esbuild-preprocessor
+npx i -D cypress @bahmutov/cypress-esbuild-preprocessor
 # note: this plugin assumes the esbuild is peer dependency
 ```
 
