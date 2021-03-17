@@ -1,7 +1,7 @@
 {
   "name": "cypress-esbuild-preprocessor",
   "version": "1.0.0",
-  "description": "",
+  "description": "Bundle Cypress specs using esbuild",
   "main": "src",
   "files": [
     "src"
