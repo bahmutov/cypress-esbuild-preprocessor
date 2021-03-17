@@ -1,0 +1,23 @@
+{
+  "name": "cypress-esbuild-preprocessor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "cypress run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "6.7.1",
+    "prettier": "2.2.1"
+  },
+  "dependencies": {
+    "debug": "4.3.1",
+    "esbuild": "0.9.2"
+  }
+}
