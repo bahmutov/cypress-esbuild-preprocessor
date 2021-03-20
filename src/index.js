@@ -14,7 +14,7 @@ const bundleOnce = ({ filePath, outputPath }) => {
   })
   const finished = +new Date()
   const elapsed = finished - started
-  debug('bundling took %dms', elapsed)
+  debug('bundling %s took %dms', filePath, elapsed)
 }
 
 const filePreprocessor = (file) => {
