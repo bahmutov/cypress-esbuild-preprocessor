@@ -41,8 +41,9 @@ But also if something is not working, check out the alternative package: [cypres
 // v1
 const bundler = require('cypress-esbuild-preprocessor')
 module.exports = (on, config) => {
-  on('file:preprocessor', bundler())
+  on('file:preprocessor', bundler)
 }
+
 // v2
 const createBundler = require('cypress-esbuild-preprocessor')
 module.exports = (on, config) => {
