@@ -4,8 +4,8 @@
 // the project's config changing)
 
 // in the user project it would be
-// const bundler = require('cypress-esbuild-preprocessor')
-const bundler = require('../..')
+// const createBundler = require('cypress-esbuild-preprocessor')
+const createBundler = require('../..')
 
 /**
  * @type {Cypress.PluginConfig}
@@ -13,5 +13,15 @@ const bundler = require('../..')
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+
+  // https://esbuild.github.io/api/
+  const esBuildOptions = {
+    define: {
+      // replaces every instance of "process.env.NODE_ENV" string
+      // in the spec with the string "development"
+      'process.env.NODE_ENV': '"development"',
+    },
+  }
+  const bundler = createBundler(esBuildOptions)
   on('file:preprocessor', bundler)
 }

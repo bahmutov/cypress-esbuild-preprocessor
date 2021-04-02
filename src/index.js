@@ -17,54 +17,59 @@ const bundleOnce = ({ filePath, outputPath }) => {
   debug('bundling %s took %dms', filePath, elapsed)
 }
 
-const filePreprocessor = (file) => {
-  const { filePath, outputPath, shouldWatch } = file
+const createBundler = (esBuildUserOptions = {}) => {
+  return function cypressESBuildFilePreprocessor(file) {
+    const { filePath, outputPath, shouldWatch } = file
 
-  debug({ filePath, outputPath, shouldWatch })
+    debug({ filePath, outputPath, shouldWatch })
 
-  if (!shouldWatch) {
-    bundleOnce({ filePath, outputPath })
-    return outputPath
-  }
+    if (!shouldWatch) {
+      bundleOnce({ filePath, outputPath })
+      return outputPath
+    }
 
-  if (bundled[filePath]) {
-    debug('already have bundle promise for file %s', filePath)
-    return bundled[filePath]
-  }
+    if (bundled[filePath]) {
+      debug('already have bundle promise for file %s', filePath)
+      return bundled[filePath]
+    }
 
-  const esBuildOptions = {
-    entryPoints: [filePath],
-    outfile: outputPath,
-    bundle: true,
-    // https://esbuild.github.io/api/#watch
-    watch: {
-      onRebuild(error, result) {
-        if (error) {
-          console.error('watch build failed:', error)
-        } else {
-          debug(
-            'watch on %s build succeeded, warnings %o',
-            filePath,
-            result.warnings,
-          )
-          file.emit('rerun')
-        }
+    const esBuildOptions = {
+      // user options
+      ...esBuildUserOptions,
+      // our options
+      entryPoints: [filePath],
+      outfile: outputPath,
+      bundle: true,
+      // https://esbuild.github.io/api/#watch
+      watch: {
+        onRebuild(error, result) {
+          if (error) {
+            console.error('watch build failed:', error)
+          } else {
+            debug(
+              'watch on %s build succeeded, warnings %o',
+              filePath,
+              result.warnings,
+            )
+            file.emit('rerun')
+          }
+        },
       },
-    },
-  }
+    }
 
-  bundled[filePath] = esbuild.build(esBuildOptions).then((watcher) => {
-    // when the test runner closes this spec
-    file.on('close', () => {
-      debug('file %s close, removing bundle promise', filePath)
-      delete bundled[filePath]
-      watcher.stop()
+    bundled[filePath] = esbuild.build(esBuildOptions).then((watcher) => {
+      // when the test runner closes this spec
+      file.on('close', () => {
+        debug('file %s close, removing bundle promise', filePath)
+        delete bundled[filePath]
+        watcher.stop()
+      })
+
+      return outputPath
     })
 
-    return outputPath
-  })
-
-  return bundled[filePath]
+    return bundled[filePath]
+  }
 }
 
-module.exports = filePreprocessor
+module.exports = createBundler
