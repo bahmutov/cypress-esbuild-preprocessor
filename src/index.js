@@ -32,37 +32,37 @@ const filePreprocessor = (file) => {
     return bundled[filePath]
   }
 
-  bundled[filePath] = esbuild
-    .build({
-      entryPoints: [filePath],
-      outfile: outputPath,
-      bundle: true,
-      // https://esbuild.github.io/api/#watch
-      watch: {
-        onRebuild(error, result) {
-          if (error) {
-            console.error('watch build failed:', error)
-          } else {
-            debug(
-              'watch on %s build succeeded, warnings %o',
-              filePath,
-              result.warnings,
-            )
-            file.emit('rerun')
-          }
-        },
+  const esBuildOptions = {
+    entryPoints: [filePath],
+    outfile: outputPath,
+    bundle: true,
+    // https://esbuild.github.io/api/#watch
+    watch: {
+      onRebuild(error, result) {
+        if (error) {
+          console.error('watch build failed:', error)
+        } else {
+          debug(
+            'watch on %s build succeeded, warnings %o',
+            filePath,
+            result.warnings,
+          )
+          file.emit('rerun')
+        }
       },
-    })
-    .then((watcher) => {
-      // when the test runner closes this spec
-      file.on('close', () => {
-        debug('file %s close, removing bundle promise', filePath)
-        delete bundled[filePath]
-        watcher.stop()
-      })
+    },
+  }
 
-      return outputPath
+  bundled[filePath] = esbuild.build(esBuildOptions).then((watcher) => {
+    // when the test runner closes this spec
+    file.on('close', () => {
+      debug('file %s close, removing bundle promise', filePath)
+      delete bundled[filePath]
+      watcher.stop()
     })
+
+    return outputPath
+  })
 
   return bundled[filePath]
 }
