@@ -17,8 +17,20 @@ In your plugin file use this module as the preprocessor
 // cypress/plugins/index.js
 const createBundler = require('@bahmutov/cypress-esbuild-preprocessor')
 module.exports = (on, config) => {
+  on('file:preprocessor', createBundler())
+}
+```
+
+### ESBuild options
+
+If you want to pass your own [ESBuild options](https://esbuild.github.io/api/)
+
+```js
+// cypress/plugins/index.js
+const createBundler = require('@bahmutov/cypress-esbuild-preprocessor')
+module.exports = (on, config) => {
   const bundler = createBundler({
-    // any ESBuild options
+    // any ESBuild options here
     // https://esbuild.github.io/api/
   })
   on('file:preprocessor', bundler)
