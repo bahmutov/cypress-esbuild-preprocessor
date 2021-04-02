@@ -18,6 +18,8 @@ const bundleOnce = ({ filePath, outputPath }) => {
 }
 
 const createBundler = (esBuildUserOptions = {}) => {
+  debug('ESBuild user options %o', esBuildUserOptions)
+
   return function cypressESBuildFilePreprocessor(file) {
     const { filePath, outputPath, shouldWatch } = file
 
