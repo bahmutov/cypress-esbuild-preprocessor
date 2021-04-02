@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-npm i -D cypress @bahmutov/cypress-esbuild-preprocessor
+npm i -D cypress @bahmutov/cypress-esbuild-preprocessor esbuild
 # note: this plugin assumes the esbuild is peer dependency
 ```
 
