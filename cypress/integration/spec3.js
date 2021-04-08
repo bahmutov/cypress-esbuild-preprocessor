@@ -6,5 +6,8 @@ describe('spec with process.env.NODE_ENV', () => {
     // we passed a "define" object with "process.env.NODE_END"
     // to be replaced with "development"
     expect(process.env.NODE_ENV, 'NODE_ENV').to.equal('development')
+
+    // we also set another text substitution
+    expect(myValue, 'myValue').to.equal(42)
   })
 })
