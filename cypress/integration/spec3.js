@@ -8,6 +8,6 @@ describe('spec with process.env.NODE_ENV', () => {
     expect(process.env.NODE_ENV, 'NODE_ENV').to.equal('development')
 
     // we also set another text substitution
-    expect(myValue, 'myValue').to.equal(42)
+    expect(myVariable, 'my variable').to.equal(42)
   })
 })
