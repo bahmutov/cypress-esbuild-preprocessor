@@ -4,10 +4,11 @@ const debug = require('debug')('cypress-esbuild-preprocessor')
 // bundled[filename] => promise
 const bundled = {}
 
-const bundleOnce = ({ filePath, outputPath }) => {
+const bundleOnce = ({ filePath, outputPath, esBuildUserOptions }) => {
   const started = +new Date()
 
   esbuild.buildSync({
+    ...esBuildUserOptions,
     entryPoints: [filePath],
     outfile: outputPath,
     bundle: true,
@@ -26,7 +27,7 @@ const createBundler = (esBuildUserOptions = {}) => {
     debug({ filePath, outputPath, shouldWatch })
 
     if (!shouldWatch) {
-      bundleOnce({ filePath, outputPath })
+      bundleOnce({ filePath, outputPath, esBuildUserOptions })
       return outputPath
     }
 
