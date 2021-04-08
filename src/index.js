@@ -5,6 +5,7 @@ const debug = require('debug')('cypress-esbuild-preprocessor')
 const bundled = {}
 
 const bundleOnce = ({ filePath, outputPath }) => {
+  debug('bundleOnce %s', filePath)
   const started = +new Date()
 
   esbuild.buildSync({

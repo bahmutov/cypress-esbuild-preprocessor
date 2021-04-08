@@ -20,6 +20,8 @@ module.exports = (on, config) => {
       // replaces every instance of "process.env.NODE_ENV" string
       // in the spec with the string "development"
       'process.env.NODE_ENV': '"development"',
+      // and replace every instance of "myVariable" with number 42
+      myVariable: '42',
     },
   }
   const bundler = createBundler(esBuildOptions)
