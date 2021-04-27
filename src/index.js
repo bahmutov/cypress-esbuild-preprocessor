@@ -8,15 +8,18 @@ const bundleOnce = ({ filePath, outputPath, esBuildUserOptions }) => {
   debug('bundleOnce %s', filePath)
   const started = +new Date()
 
-  esbuild.buildSync({
-    ...esBuildUserOptions,
-    entryPoints: [filePath],
-    outfile: outputPath,
-    bundle: true,
-  })
-  const finished = +new Date()
-  const elapsed = finished - started
-  debug('bundling %s took %dms', filePath, elapsed)
+  return esbuild
+    .build({
+      ...esBuildUserOptions,
+      entryPoints: [filePath],
+      outfile: outputPath,
+      bundle: true,
+    })
+    .then(() => {
+      const finished = +new Date()
+      const elapsed = finished - started
+      debug('bundling %s took %dms', filePath, elapsed)
+    })
 }
 
 const createBundler = (esBuildUserOptions = {}) => {
@@ -28,8 +31,9 @@ const createBundler = (esBuildUserOptions = {}) => {
     debug({ filePath, outputPath, shouldWatch })
 
     if (!shouldWatch) {
-      bundleOnce({ filePath, outputPath, esBuildUserOptions })
-      return outputPath
+      return bundleOnce({ filePath, outputPath, esBuildUserOptions }).then(
+        () => outputPath,
+      )
     }
 
     if (bundled[filePath]) {
