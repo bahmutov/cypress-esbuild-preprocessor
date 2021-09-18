@@ -19,7 +19,7 @@
     "cypress": "8.4.1",
     "prettier": "2.4.1",
     "esbuild": "0.12.28",
-    "semantic-release": "17.4.7"
+    "semantic-release": "18.0.0"
   },
   "dependencies": {
     "debug": "4.3.2"
