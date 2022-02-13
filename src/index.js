@@ -1,9 +1,21 @@
 const esbuild = require('esbuild')
 const debug = require('debug')('cypress-esbuild-preprocessor')
 
+/**
+ * @typedef {import("./index.d").BundleOnceParams} BundleOnceParams
+ * @typedef {import("./index.d").CypressPlugin} CypressPlugin
+ * @typedef {import("esbuild").BuildOptions} BuildOptions
+ */
+
 // bundled[filename] => promise
 const bundled = {}
 
+/**
+ * Bundles the files only once.
+ *
+ * @param {BundleOnceParams} params
+ * @returns {Promise<void>}
+ */
 const bundleOnce = ({ filePath, outputPath, esBuildUserOptions }) => {
   debug('bundleOnce %s', filePath)
   const started = +new Date()
@@ -22,6 +34,21 @@ const bundleOnce = ({ filePath, outputPath, esBuildUserOptions }) => {
     })
 }
 
+/**
+ * Pass ESBuild options to be applied to each spec file
+ *
+ * @example
+ *
+ * const bundler = createBundler({
+ *  define: {
+ *    "process.env.NODE_ENV": '"development"'
+ *  }
+ * });
+ * on('file:preprocessor', bundler)
+ *
+ * @param {BuildOptions} esBuildUserOptions
+ * @returns {CypressPlugin}
+ */
 const createBundler = (esBuildUserOptions = {}) => {
   debug('ESBuild user options %o', esBuildUserOptions)
 
