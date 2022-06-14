@@ -1,5 +1,6 @@
 # @bahmutov/cypress-esbuild-preprocessor
-![cypress version](https://img.shields.io/badge/cypress-9.7.0-brightgreen) ![esbuild version](https://img.shields.io/badge/esbuild-0.14.42-brightgreen) [![ci status][ci image]][ci url]
+
+![cypress version](https://img.shields.io/badge/cypress-10.1.0-brightgreen) ![esbuild version](https://img.shields.io/badge/esbuild-0.14.42-brightgreen) [![ci status][ci image]][ci url]
 > Bundle Cypress specs using [esbuild](https://esbuild.github.io/)
 
 ## Install
@@ -14,11 +15,16 @@ npm i -D cypress @bahmutov/cypress-esbuild-preprocessor esbuild
 In your plugin file use this module as the preprocessor
 
 ```js
-// cypress/plugins/index.js
+// cypress.config.js
+const { defineConfig } = require('cypress')
 const createBundler = require('@bahmutov/cypress-esbuild-preprocessor')
-module.exports = (on, config) => {
-  on('file:preprocessor', createBundler())
-}
+module.exports = defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      on('file:preprocessor', createBundler())
+    }
+  }
+})
 ```
 
 ### ESBuild options
@@ -26,15 +32,20 @@ module.exports = (on, config) => {
 If you want to pass your own [ESBuild options](https://esbuild.github.io/api/)
 
 ```js
-// cypress/plugins/index.js
+// cypress.config.js
+const { defineConfig } = require('cypress')
 const createBundler = require('@bahmutov/cypress-esbuild-preprocessor')
-module.exports = (on, config) => {
-  const bundler = createBundler({
-    // any ESBuild options here
-    // https://esbuild.github.io/api/
-  })
-  on('file:preprocessor', bundler)
-}
+module.exports = defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      const bundler = createBundler({
+        // any ESBuild options here
+        // https://esbuild.github.io/api/
+      })
+      on('file:preprocessor', bundler)
+    }
+  }
+})
 ```
 
 ## Debugging
@@ -51,22 +62,32 @@ But also if something is not working, check out the alternative package: [cypres
 
 ```js
 // v1
+const { defineConfig } = require('cypress')
 const bundler = require('cypress-esbuild-preprocessor')
-module.exports = (on, config) => {
-  on('file:preprocessor', bundler)
-}
+module.exports = defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      on('file:preprocessor', bundler)
+    }
+  }
+})
 
 // v2
+const { defineConfig } = require('cypress')
 const createBundler = require('cypress-esbuild-preprocessor')
-module.exports = (on, config) => {
-  // pass ESBuild options to be applied to each spec file
-  const bundler = createBundler({
-    define: {
-      "process.env.NODE_ENV": '"development"'
+module.exports = defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      // pass ESBuild options to be applied to each spec file
+      const bundler = createBundler({
+        define: {
+          "process.env.NODE_ENV": '"development"',
+        },
+      })
+      on('file:preprocessor', bundler)
     }
-  })
-  on('file:preprocessor', bundler)
-}
+  }
+})
 ```
 
 [ci image]: https://github.com/bahmutov/cypress-esbuild-preprocessor/workflows/ci/badge.svg?branch=main
