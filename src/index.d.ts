@@ -1,11 +1,6 @@
 /// <reference types="node" />
 import { BuildOptions } from 'esbuild';
 
-export interface BundleOnceParams {
-  filePath: string;
-  outputPath: string;
-  esBuildUserOptions: BuildOptions;
-}
 export interface CypressFileObject {
   filePath: string;
   outputPath: string;
