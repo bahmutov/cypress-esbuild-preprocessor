@@ -3,6 +3,7 @@
   "version": "0.0.0-development",
   "description": "Bundle Cypress specs using esbuild",
   "main": "src",
+  "typings": "src/index.d.ts",
   "files": [
     "src"
   ],
