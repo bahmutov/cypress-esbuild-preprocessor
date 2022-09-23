@@ -1,14 +1,14 @@
 /// <reference types="node" />
-import { BuildOptions } from 'esbuild';
+import type { BuildOptions } from 'esbuild';
 
-export interface CypressFileObject {
+interface CypressFileObject {
   filePath: string;
   outputPath: string;
   shouldWatch: boolean;
 }
-export declare type CypressPlugin = (file: CypressFileObject & NodeJS.EventEmitter) => Promise<string> | string;
+declare type CypressPlugin = (file: CypressFileObject & NodeJS.EventEmitter) => Promise<string> | string;
 
-export interface BundleOnceParams {
+interface BundleOnceParams {
   filePath: string;
   outputPath: string;
   esBuildUserOptions: BuildOptions;
@@ -20,7 +20,7 @@ export interface BundleOnceParams {
  * @param {BundleOnceParams} params
  * @returns {Promise<void>}
  */
-export declare const bundleOnce: ({ filePath, outputPath, esBuildUserOptions, }: BundleOnceParams) => Promise<void>;
+declare function bundleOnce({ filePath, outputPath, esBuildUserOptions, }: BundleOnceParams): Promise<void>;
 
 
 /**
@@ -38,4 +38,10 @@ export declare const bundleOnce: ({ filePath, outputPath, esBuildUserOptions, }:
  * @param {BuildOptions} esBuildUserOptions
  * @returns
  */
-export declare const createBundler: (esBuildUserOptions?: BuildOptions) => CypressPlugin;
+declare function createBundler(esBuildUserOptions?: BuildOptions): CypressPlugin;
+
+declare namespace createBundler {
+  export { BundleOnceParams, BuildOptions, CypressFileObject, CypressPlugin };
+}
+
+export = createBundler;
