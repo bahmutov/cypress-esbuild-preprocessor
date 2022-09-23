@@ -1,5 +1,7 @@
 # @bahmutov/cypress-esbuild-preprocessor
+
 ![cypress version](https://img.shields.io/badge/cypress-9.7.0-brightgreen) ![esbuild version](https://img.shields.io/badge/esbuild-0.15.8-brightgreen) [![ci status][ci image]][ci url]
+
 > Bundle Cypress specs using [esbuild](https://esbuild.github.io/)
 
 ## Install
@@ -62,8 +64,8 @@ module.exports = (on, config) => {
   // pass ESBuild options to be applied to each spec file
   const bundler = createBundler({
     define: {
-      "process.env.NODE_ENV": '"development"'
-    }
+      'process.env.NODE_ENV': '"development"',
+    },
   })
   on('file:preprocessor', bundler)
 }
@@ -71,3 +73,21 @@ module.exports = (on, config) => {
 
 [ci image]: https://github.com/bahmutov/cypress-esbuild-preprocessor/workflows/ci/badge.svg?branch=main
 [ci url]: https://github.com/bahmutov/cypress-esbuild-preprocessor/actions
+
+## Small print
+
+Author: Gleb Bahmutov &lt;gleb.bahmutov@gmail.com&gt; &copy; 2022
+
+- [@bahmutov](https://twitter.com/bahmutov)
+- [glebbahmutov.com](https://glebbahmutov.com)
+- [blog](https://glebbahmutov.com/blog)
+- [videos](https://www.youtube.com/glebbahmutov)
+- [presentations](https://slides.com/bahmutov)
+- [cypress.tips](https://cypress.tips)
+- [Cypress Tips & Tricks Newsletter](https://cypresstips.substack.com/)
+- [my Cypress courses](https://cypress.tips/courses)
+
+License: MIT - do anything with the code, but don't blame me if it does not work.
+
+Support: if you find any problems with this module, email / tweet /
+[open issue](https://github.com/bahmutov/cypress-esbuild-preprocessor/issues) on Github
