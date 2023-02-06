@@ -75,29 +75,30 @@ const createBundler = (esBuildUserOptions = {}) => {
       entryPoints: [filePath],
       outfile: outputPath,
       bundle: true,
-      // https://esbuild.github.io/api/#watch
-      watch: {
-        onRebuild(error, result) {
-          if (error) {
-            console.error('watch build failed:', error)
-          } else {
-            debug(
-              'watch on %s build succeeded, warnings %o',
-              filePath,
-              result.warnings,
-            )
-            file.emit('rerun')
-          }
-        },
+    }
+    // our plugin for new watch mode of esbuild 0.17.0
+    const customBuildPlugin = {
+      name: 'cypress-esbuild-watch-plugin',
+      setup(build) {
+        build.onEnd(result => {
+          debug(
+            'watch on %s build succeeded, warnings %o',
+            filePath,
+            result.warnings,
+          )
+          file.emit('rerun')
+        });
       },
     }
-
-    bundled[filePath] = esbuild.build(esBuildOptions).then((watcher) => {
-      // when the test runner closes this spec
-      file.on('close', () => {
-        debug('file %s close, removing bundle promise', filePath)
-        delete bundled[filePath]
-        watcher.stop()
+    const plugins = esBuildOptions.plugins ? [...esBuildOptions.plugins, customBuildPlugin] : [customBuildPlugin];
+    bundled[filePath] = esbuild.context({...esBuildOptions, plugins}).then((watcher) => {
+      watcher.watch().then((_) => {
+        // when the test runner closes this spec
+        file.on('close', () => {
+          debug('file %s close, removing bundle promise', filePath)
+          delete bundled[filePath]
+          watcher.dispose()
+        })
       })
 
       return outputPath
