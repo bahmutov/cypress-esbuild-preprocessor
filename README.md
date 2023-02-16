@@ -11,6 +11,13 @@ npm i -D cypress @bahmutov/cypress-esbuild-preprocessor esbuild
 # note: this plugin assumes the esbuild is peer dependency
 ```
 
+### esbuild version support
+
+| esbuild version | cypress-esbuild-preprocessor version |
+| --------------- | ------------------------------------ |
+| < 0.17          | < 2.2.0                              |
+| >= 0.17         | 2.2.0                                |
+
 ## Use
 
 In your plugin file use this module as the preprocessor
