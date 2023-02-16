@@ -20,6 +20,26 @@ npm i -D cypress @bahmutov/cypress-esbuild-preprocessor esbuild
 
 ## Use
 
+### Cypress v10+
+
+In your config file add this module as a preprocessor
+
+```js
+// cypress.config.js
+import { defineConfig } from 'cypress'
+import createBundler from '@bahmutov/cypress-esbuild-preprocessor'
+
+export default defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      on('file:preprocessor', createBundler())
+    },
+  },
+})
+```
+
+### Cypress before v10
+
 In your plugin file use this module as the preprocessor
 
 ```js
