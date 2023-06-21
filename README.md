@@ -1,6 +1,6 @@
 # @bahmutov/cypress-esbuild-preprocessor
 
-![cypress version](https://img.shields.io/badge/cypress-12.14.0-brightgreen) ![esbuild version](https://img.shields.io/badge/esbuild-0.18.4-brightgreen) [![ci status][ci image]][ci url]
+![cypress version](https://img.shields.io/badge/cypress-12.14.0-brightgreen) ![esbuild version](https://img.shields.io/badge/esbuild-0.18.5-brightgreen) [![ci status][ci image]][ci url]
 
 > Bundle Cypress specs using [esbuild](https://esbuild.github.io/)
 
