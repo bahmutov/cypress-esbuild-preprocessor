@@ -23,7 +23,7 @@
     "esbuild": "0.20.1",
     "prettier": "3.2.5",
     "semantic-release": "23.0.2",
-    "typescript": "5.3.3"
+    "typescript": "5.4.2"
   },
   "dependencies": {
     "debug": "4.3.4"
