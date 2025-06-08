@@ -80,14 +80,34 @@ const createBundler = (esBuildUserOptions = {}) => {
     const customBuildPlugin = {
       name: 'cypress-esbuild-watch-plugin',
       setup(build) {
-        build.onEnd(result => {
+        build.onEnd((result) => {
+          if (result.errors.length > 0) {
+            debug(
+              'watch on %s build failed, errors %o',
+              filePath,
+              result.errors,
+            )
+
+            bundled[filePath] = new Promise((resolve, reject) => {
+              esbuild
+                .formatMessages(result.errors, {
+                  kind: 'error',
+                  color: false,
+                })
+                .then((messages) => reject(new Error(messages.join('\n\n'))))
+            })
+
+            file.emit('rerun')
+            return
+          }
+
           debug(
             'watch on %s build succeeded, warnings %o',
             filePath,
             result.warnings,
           )
           file.emit('rerun')
-        });
+        })
       },
     }
     const plugins = esBuildOptions.plugins ? [...esBuildOptions.plugins, customBuildPlugin] : [customBuildPlugin];
