@@ -19,7 +19,7 @@
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "cypress": "14.5.2",
+    "cypress": "14.5.3",
     "esbuild": "0.25.8",
     "prettier": "3.6.2",
     "semantic-release": "24.2.7",
