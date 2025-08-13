@@ -20,7 +20,7 @@
   "license": "MIT",
   "devDependencies": {
     "cypress": "14.5.4",
-    "esbuild": "0.25.8",
+    "esbuild": "0.25.9",
     "prettier": "3.6.2",
     "semantic-release": "24.2.7",
     "typescript": "5.9.2"
