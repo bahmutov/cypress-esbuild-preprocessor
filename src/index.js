@@ -76,53 +76,81 @@ const createBundler = (esBuildUserOptions = {}) => {
       outfile: outputPath,
       bundle: true,
     }
-    // our plugin for new watch mode of esbuild 0.17.0
-    const customBuildPlugin = {
-      name: 'cypress-esbuild-watch-plugin',
-      setup(build) {
-        build.onEnd((result) => {
-          if (result.errors.length > 0) {
-            debug(
-              'watch on %s build failed, errors %o',
-              filePath,
-              result.errors,
-            )
 
-            bundled[filePath] = new Promise((resolve, reject) => {
-              esbuild
+    let isResolved = false;
+
+    bundled[filePath] = new Promise((resolve, reject) => {
+      // our plugin for new watch mode of esbuild 0.17.0
+      const customBuildPlugin = {
+        name: 'cypress-esbuild-watch-plugin',
+        setup(build) {
+          build.onEnd(async (result) => {
+            if (result.errors.length > 0) {
+              debug(
+                'watch on %s build failed, errors %o',
+                filePath,
+                result.errors,
+              )
+
+              result = [undefined, await esbuild
                 .formatMessages(result.errors, {
                   kind: 'error',
                   color: false,
                 })
                 .then((messages) => reject(new Error(messages.join('\n\n'))))
-            })
+              ]
+            } else {
+              result = [outputPath, undefined]
 
-            file.emit('rerun')
-            return
-          }
+              debug(
+                'watch on %s build succeeded, warnings %o',
+                filePath,
+                result.warnings,
+              )
+            }
 
-          debug(
-            'watch on %s build succeeded, warnings %o',
-            filePath,
-            result.warnings,
-          )
-          file.emit('rerun')
-        })
-      },
-    }
-    const plugins = esBuildOptions.plugins ? [...esBuildOptions.plugins, customBuildPlugin] : [customBuildPlugin];
-    bundled[filePath] = esbuild.context({...esBuildOptions, plugins}).then((watcher) => {
-      watcher.watch().then((_) => {
-        // when the test runner closes this spec
-        file.on('close', () => {
-          debug('file %s close, removing bundle promise', filePath)
-          delete bundled[filePath]
-          watcher.dispose()
+            if (isResolved) {
+              debug(
+                'rerun %s',
+                filePath,
+              )
+              debug((await require("fs/promises").readFile(outputPath)).toString())
+              bundled[filePath] = result[0] ? Promise.resolve(result[0]) : Promise.reject(result[1])
+              file.emit('rerun')
+            } else {
+              if (result[0]) {
+                debug(
+                  'resolving %s for the 1st time',
+                  filePath,
+                )
+                resolve(result[0])
+              } else {
+                debug(
+                  'rejecting %s for the 1st time',
+                  filePath,
+                )
+                reject(result[1])
+              }
+
+              isResolved = true;
+            }
+          })
+        },
+      }
+
+      const plugins = esBuildOptions.plugins ? [...esBuildOptions.plugins, customBuildPlugin] : [customBuildPlugin];
+
+      esbuild.context({...esBuildOptions, plugins}).then((watcher) => {
+        watcher.watch().then((_) => {
+          // when the test runner closes this spec
+          file.on('close', () => {
+            debug('file %s close, removing bundle promise', filePath)
+            delete bundled[filePath]
+            watcher.dispose()
+          })
         })
       })
-
-      return outputPath
-    })
+    });
 
     return bundled[filePath]
   }
