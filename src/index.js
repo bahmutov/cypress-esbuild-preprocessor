@@ -77,7 +77,7 @@ const createBundler = (esBuildUserOptions = {}) => {
       bundle: true,
     }
 
-    let isResolved = false;
+    let isResolved = false
 
     bundled[filePath] = new Promise((resolve, reject) => {
       // our plugin for new watch mode of esbuild 0.17.0
@@ -92,12 +92,14 @@ const createBundler = (esBuildUserOptions = {}) => {
                 result.errors,
               )
 
-              result = [undefined, await esbuild
-                .formatMessages(result.errors, {
-                  kind: 'error',
-                  color: false,
-                })
-                .then((messages) => reject(new Error(messages.join('\n\n'))))
+              result = [
+                undefined,
+                await esbuild
+                  .formatMessages(result.errors, {
+                    kind: 'error',
+                    color: false,
+                  })
+                  .then((messages) => reject(new Error(messages.join('\n\n')))),
               ]
             } else {
               result = [outputPath, undefined]
@@ -110,36 +112,31 @@ const createBundler = (esBuildUserOptions = {}) => {
             }
 
             if (isResolved) {
-              debug(
-                'rerun %s',
-                filePath,
-              )
-              bundled[filePath] = result[0] ? Promise.resolve(result[0]) : Promise.reject(result[1])
+              debug('rerun %s', filePath)
+              bundled[filePath] = result[0]
+                ? Promise.resolve(result[0])
+                : Promise.reject(result[1])
               file.emit('rerun')
             } else {
               if (result[0]) {
-                debug(
-                  'resolving %s for the 1st time',
-                  filePath,
-                )
+                debug('resolving %s for the 1st time', filePath)
                 resolve(result[0])
               } else {
-                debug(
-                  'rejecting %s for the 1st time',
-                  filePath,
-                )
+                debug('rejecting %s for the 1st time', filePath)
                 reject(result[1])
               }
 
-              isResolved = true;
+              isResolved = true
             }
           })
         },
       }
 
-      const plugins = esBuildOptions.plugins ? [...esBuildOptions.plugins, customBuildPlugin] : [customBuildPlugin];
+      const plugins = esBuildOptions.plugins
+        ? [...esBuildOptions.plugins, customBuildPlugin]
+        : [customBuildPlugin]
 
-      esbuild.context({...esBuildOptions, plugins}).then((watcher) => {
+      esbuild.context({ ...esBuildOptions, plugins }).then((watcher) => {
         watcher.watch().then((_) => {
           // when the test runner closes this spec
           file.on('close', () => {
@@ -149,7 +146,7 @@ const createBundler = (esBuildUserOptions = {}) => {
           })
         })
       })
-    });
+    })
 
     return bundled[filePath]
   }
