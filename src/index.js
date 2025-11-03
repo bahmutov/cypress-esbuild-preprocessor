@@ -114,7 +114,6 @@ const createBundler = (esBuildUserOptions = {}) => {
                 'rerun %s',
                 filePath,
               )
-              debug((await require("fs/promises").readFile(outputPath)).toString())
               bundled[filePath] = result[0] ? Promise.resolve(result[0]) : Promise.reject(result[1])
               file.emit('rerun')
             } else {
