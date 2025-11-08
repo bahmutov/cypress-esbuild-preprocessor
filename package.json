@@ -22,7 +22,7 @@
     "cypress": "15.6.0",
     "esbuild": "0.25.12",
     "prettier": "3.6.2",
-    "semantic-release": "25.0.1",
+    "semantic-release": "25.0.2",
     "typescript": "5.9.3"
   },
   "dependencies": {
