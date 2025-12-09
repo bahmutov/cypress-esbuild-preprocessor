@@ -79,7 +79,7 @@ const createBundler = (esBuildUserOptions = {}) => {
       ...esBuildUserOptions,
       // our options
       entryPoints: [filePath],
-      outfile: `${filePath}.bak`,
+      outfile: `${filePath}.tmp`,
       bundle: true,
     }
 
@@ -108,7 +108,7 @@ const createBundler = (esBuildUserOptions = {}) => {
             } else {
               result = [outputPath, undefined]
 
-              await fs.rename(`${filePath}.bak`, outputPath)
+              await fs.rename(`${filePath}.tmp`, outputPath)
 
               debug(
                 'watch on %s build succeeded, warnings %o',
