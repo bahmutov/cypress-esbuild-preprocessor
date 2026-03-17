@@ -97,7 +97,7 @@ const createBundler = (esBuildUserOptions = {}) => {
                 await esbuild.formatMessages(result.errors, {
                   kind: 'error',
                   color: false,
-                }),
+                }).then((messages) => reject(new Error(messages.join('\n\n')))),
               ]
             } else {
               result = [outputPath, undefined]
