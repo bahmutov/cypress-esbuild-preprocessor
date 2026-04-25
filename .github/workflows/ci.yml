@@ -15,7 +15,7 @@ jobs:
           DEBUG: cypress-esbuild-preprocessor
 
       - name: Semantic Release 🚀
-        uses: cycjimmy/semantic-release-action@v5
+        uses: cycjimmy/semantic-release-action@v6.0.0
         if: github.ref == 'refs/heads/main'
         with:
           branch: main
