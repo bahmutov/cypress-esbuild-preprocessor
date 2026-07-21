@@ -21,7 +21,7 @@
   "devDependencies": {
     "cypress": "15.15.0",
     "esbuild": "0.28.1",
-    "prettier": "3.9.5",
+    "prettier": "3.9.6",
     "semantic-release": "25.0.8",
     "typescript": "7.0.2"
   },
