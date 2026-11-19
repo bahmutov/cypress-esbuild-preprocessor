@@ -1,5 +1,6 @@
 const esbuild = require('esbuild')
 const debug = require('debug')('cypress-esbuild-preprocessor')
+const fs = require('fs/promises')
 
 /**
  * @typedef {import("./index.d").BundleOnceParams} BundleOnceParams
@@ -22,9 +23,10 @@ const bundleOnce = ({ filePath, outputPath, esBuildUserOptions }) => {
 
   return esbuild
     .build({
+      sourcemap: 'inline',
       ...esBuildUserOptions,
       entryPoints: [filePath],
-      outfile: outputPath,
+      outfile: `${filePath}.bak`,
       bundle: true,
     })
     .then(() => {
@@ -59,7 +61,10 @@ const createBundler = (esBuildUserOptions = {}) => {
 
     if (!shouldWatch) {
       return bundleOnce({ filePath, outputPath, esBuildUserOptions }).then(
-        () => outputPath,
+        async () => {
+          await fs.rename(`${filePath}.bak`, outputPath)
+          return outputPath
+        },
       )
     }
 
@@ -69,11 +74,12 @@ const createBundler = (esBuildUserOptions = {}) => {
     }
 
     const esBuildOptions = {
+      sourcemap: 'inline',
       // user options
       ...esBuildUserOptions,
       // our options
       entryPoints: [filePath],
-      outfile: outputPath,
+      outfile: `${filePath}.tmp`,
       bundle: true,
     }
 
@@ -101,6 +107,8 @@ const createBundler = (esBuildUserOptions = {}) => {
               ]
             } else {
               result = [outputPath, undefined]
+
+              await fs.rename(`${filePath}.tmp`, outputPath)
 
               debug(
                 'watch on %s build succeeded, warnings %o',
